@@ -12,8 +12,8 @@ $font-family: "Geometria", sans-serif;
     color: white;
 
     &:focus {
-        outline: none;
-        box-shadow: none;
+        outline: none !important;
+        box-shadow: none !important;
     }
 
     &:hover {
@@ -25,8 +25,7 @@ $font-family: "Geometria", sans-serif;
         background-color: gray;
     }
 
-    &.bim-editor-round-btn-remove {
-        color: white;
+    &-remove {
         $button-background: red;
 
         background-color: $button-background;

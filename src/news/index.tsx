@@ -58,10 +58,14 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         fieldName: "input",
         placeholder: "ПОСЛЕДНИЕ ОБНОВЛЕНИЯ",
         label: "Заголовок",
-        getValue: () => title,
-        setValue: updateTitle,
+        getValue: (title) => title,
+        setValue: (_, newTitle) => setAttributes({ title: newTitle }),
       },
     ];
+
+    const cfg = titleConfig[0];
+
+    const getTitle = () => title;
 
     return (
       <div {...useBlockProps()}>

@@ -6,7 +6,7 @@ import { Button } from "@wordpress/components";
 import { Icon, chevronDown, chevronUp, close, create } from "@wordpress/icons";
 
 import { BimSpacer } from ".";
-import "./editor-list.scss";
+import "./editor.scss";
 
 export interface InputFieldConfig<Item> {
   fieldName: "input" | "RichText";
@@ -16,7 +16,7 @@ export interface InputFieldConfig<Item> {
   setValue: (item: Item, value: string) => void;
 }
 
-const BimEditorInputField = <Item,>({
+export const BimEditorInputField = <Item,>({
   item,
   config,
   onItemChange,
