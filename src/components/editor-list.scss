@@ -1,0 +1,112 @@
+$font-family: "Geometria", sans-serif;
+
+.bim-editor-round-btn {
+    padding: 8px !important;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+
+    $button-background: teal;
+    background-color: $button-background;
+    transition: background 300ms ease-in-out;
+
+    color: white;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    &:hover {
+        background-color: darken($button-background, 10%);
+        color: white;
+    }
+
+    &:disabled {
+        background-color: gray;
+    }
+
+    &.bim-editor-round-btn-remove {
+        color: white;
+        $button-background: red;
+
+        background-color: $button-background;
+
+        &:hover {
+            background-color: darken($button-background, 10%);
+        }
+    }
+}
+
+.bim-editor-btn-column {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+    padding: 4px 0;
+}
+
+.bim-editor-input-list {
+    width: 100%;
+    max-width: 700px !important;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.bim-editor-add-btn-container {
+    padding-left: 8px;
+}
+
+.bim-editor-input-list-item {
+    width: 100%;
+    max-width: 700px !important;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+}
+
+.bim-editor-input-group {
+    padding: 8px;
+    border: gray solid 1px;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+
+    font-family: $font-family;
+
+    .bim-editor-input-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bim-editor-input-label {
+        font-size: 12px;
+        color: black;
+        width: 100%;
+        padding-left: 7px; // 1+6 from border and padding of .bim-editor-input lower
+    }
+
+    .bim-editor-input {
+        word-wrap: anywhere;
+        border: lightgrey solid 1px;
+        border-radius: 4px;
+        padding: 3px 6px 1px 6px;
+        font-size: 14px;
+        line-height: 1.7em;
+        $font-color: black;
+        color: $font-color;
+
+        [data-rich-text-placeholder]::after,
+        &::placeholder {
+            opacity: 0.6;
+            color: $font-color;
+        }
+    }
+}

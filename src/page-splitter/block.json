@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "bim-widgets/bim-page-splitter",
+  "title": "Bim Page Splitter",
+  "category": "widgets",
+  "icon": "image-flip-vertical",
+  "version": "0.1",
+  "supports": {
+    "align": true
+  },
+  "editorScript": "file:./index.js",
+  "attributes": {}
+}
