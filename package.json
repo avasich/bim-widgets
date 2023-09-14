@@ -1,22 +1,30 @@
 {
   "name": "bim-widgets",
+  "author": "a. vasich",
   "module": "src/index.ts",
   "type": "module",
+  "dependencies": {
+    "@wordpress/api-fetch": "^6.38.0",
+    "@wordpress/block-editor": "^12.9.0",
+    "@wordpress/blocks": "^12.18.0",
+    "@wordpress/components": "^25.7.0",
+    "@wordpress/element": "^5.18.0",
+    "@wordpress/hooks": "^3.41.0",
+    "@wordpress/icons": "^9.32.0"
+  },
   "devDependencies": {
     "@types/wordpress__block-editor": "^11.5.3",
     "@types/wordpress__blocks": "^12.5.3",
     "@types/wordpress__components": "^23.0.3",
-    "@wordpress/block-editor": "^12.9.0",
-    "@wordpress/blocks": "^12.18.0",
-    "@wordpress/components": "^25.7.0",
-    "@wordpress/icons": "^9.32.0",
+    "@types/wordpress__media-utils": "^4.14.1",
     "@wordpress/scripts": "^26.12.0",
     "bun-types": "latest",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "wp-types": "^3.62.4"
   },
   "scripts": {
     "build": "wp-scripts build --webpack-copy-php",
     "deploy": "bun run build && bun run copy",
-    "copy": "cp -r build/* $SITE_LOCATION/wp-content/plugins/bim-widgets/blocks/"
+    "copy": "cp -r build/* $SITE_DIR/wp-content/plugins/bim-widgets/blocks/"
   }
 }

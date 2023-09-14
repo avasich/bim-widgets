@@ -50,9 +50,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         setValue: (item, value) => (item.url = value),
       },
     ];
-    const updateTitle = (title: string) => {
-      setAttributes({ title: title });
-    };
+
     const titleConfig: InputFieldConfig<string>[] = [
       {
         fieldName: "input",
@@ -62,10 +60,6 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         setValue: (_, newTitle) => setAttributes({ title: newTitle }),
       },
     ];
-
-    const cfg = titleConfig[0];
-
-    const getTitle = () => title;
 
     return (
       <div {...useBlockProps()}>

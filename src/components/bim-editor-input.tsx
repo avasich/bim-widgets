@@ -8,13 +8,30 @@ import { Icon, chevronDown, chevronUp, close, create } from "@wordpress/icons";
 import { BimSpacer } from ".";
 import "./editor.scss";
 
-export interface InputFieldConfig<Item> {
-  fieldName: "input" | "RichText";
-  placeholder?: string;
+interface BaseInputFieldConfig<F extends string, I, V> {
+  fieldName: F;
   label?: string;
-  getValue: (item: Item) => string;
-  setValue: (item: Item, value: string) => void;
+  getValue: (item: I) => V;
+  setValue: (item: I, value: V) => void;
 }
+
+interface InputInputField<Item>
+  extends BaseInputFieldConfig<"input", Item, string> {
+  placeholder?: string;
+}
+
+interface RichTextInputField<Item>
+  extends BaseInputFieldConfig<"RichText", Item, string> {
+  placeholder?: string;
+}
+
+interface ImageInputField<Item>
+  extends BaseInputFieldConfig<"Image", Item, number> {}
+
+export type InputFieldConfig<Item> =
+  | InputInputField<Item>
+  | RichTextInputField<Item>
+  | ImageInputField<Item>;
 
 export const BimEditorInputField = <Item,>({
   item,
@@ -25,13 +42,12 @@ export const BimEditorInputField = <Item,>({
   config: InputFieldConfig<Item>;
   onItemChange?: (item: Item) => void;
 }) => {
-  const onChange = (value: string) => {
-    config.setValue(item, value);
-    onItemChange?.(item);
-  };
-
   switch (config.fieldName) {
     case "input": {
+      const onChange = (value: string) => {
+        config.setValue(item, value);
+        onItemChange?.(item);
+      };
       return (
         <input
           className="bim-editor-input"
@@ -42,6 +58,10 @@ export const BimEditorInputField = <Item,>({
       );
     }
     case "RichText": {
+      const onChange = (value: string) => {
+        config.setValue(item, value);
+        onItemChange?.(item);
+      };
       return (
         <RichText
           className="bim-editor-input"
@@ -50,6 +70,9 @@ export const BimEditorInputField = <Item,>({
           onChange={onChange}
         />
       );
+    }
+    case "Image": {
+      return <div>image loader will be here</div>;
     }
   }
 };

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "bim-widgets/bim-page-carousel",
+  "title": "Bim Carousel",
+  "category": "widgets",
+  "icon": "screenoptions",
+  "version": "0.1",
+  "selectors": {
+    "root": ".bim-carousel"
+  },
+  "attributes": {
+    "imageId": {
+      "type": "number"
+    }
+  },
+  "supports": {
+    "align": true
+  },
+  "editorScript": "file:./index.js"
+}
