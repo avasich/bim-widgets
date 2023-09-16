@@ -1,0 +1,15 @@
+$image-size: 120px;
+
+.bim-image-upload-btn {
+    width: $image-size;
+    height: $image-size;
+    padding: 0 !important;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.bim-image-upload-btn-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+}

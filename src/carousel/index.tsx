@@ -4,23 +4,16 @@ import {
   useBlockProps,
 } from "@wordpress/block-editor";
 import { BlockConfiguration, registerBlockType } from "@wordpress/blocks";
-import { Button, PanelBody } from "@wordpress/components";
-import { addFilter } from "@wordpress/hooks";
-
-import {MediaUpload as MU} from "@wordpress/media-utils"
+import { Button } from "@wordpress/components";
+import { useState, useEffect } from "@wordpress/element";
+import apiFetch from "@wordpress/api-fetch";
+import { WP_REST_API_Attachment } from "wp-types";
 
 import json from "./block.json";
+import "./editor.scss";
 
 const instructions = <p>вам нужно разрешение на загрузку изображений</p>;
 const ALLOWED_MEDIA_TYPES = ["image"];
-
-const replaceMediaUpload = () => MediaUpload;
-
-addFilter(
-  "editor.MediaUpload",
-  "core/edit-post/components/media-upload/replace-media-upload",
-  replaceMediaUpload
-);
 
 type Image = { id: number } & { [k: string]: any };
 
@@ -32,39 +25,63 @@ interface Attributes {
 registerBlockType(json as BlockConfiguration<Attributes>, {
   edit: ({ attributes, setAttributes }) => {
     const { imageId } = attributes;
-    const onUpdateImage = (image: Image) => {
-      console.log(image);
+
+    const [imageUrl, setImageUrl] = useState("");
+
+    useEffect(() => {
+      if (imageId == null) {
+        return;
+      }
+
+      const fetch = async () => {
+        const imageData: WP_REST_API_Attachment = await apiFetch({
+          path: `/wp/v2/media/${imageId}`,
+        });
+        setImageUrl(imageData.source_url);
+      };
+
+      fetch();
+    }, []);
+
+    const onUpdateImage = async (image: Image) => {
       setAttributes({
         imageId: image.id,
       });
+      setImageUrl(image.url);
     };
 
     return (
       <div {...useBlockProps()}>
-        <div
-          style={{ width: "100px", height: "100px", backgroundColor: "red" }}
-        ></div>
-        <PanelBody title="карусель" initialOpen={true}>
-          <MediaUploadCheck fallback={instructions}>
-            <MediaUpload
-              title="изображение"
-              onSelect={onUpdateImage}
-              allowedTypes={ALLOWED_MEDIA_TYPES}
-              value={imageId}
-              render={({ open }) => (
+        <MediaUploadCheck fallback={instructions}>
+          <MediaUpload
+            title="изображение"
+            onSelect={onUpdateImage}
+            allowedTypes={ALLOWED_MEDIA_TYPES}
+            value={imageId}
+            render={({ open }) => (
+              <>
                 <Button
-                  className={"editor-post-featured-image__toggle"}
+                  style={styles.button}
+                  className="bim-image-upload-btn"
                   onClick={open}
                 >
-                  загрузить изображение
+                  <img src={imageUrl} className="bim-image-upload-btn-img" />
                 </Button>
-              )}
-            />
-          </MediaUploadCheck>
-        </PanelBody>
+              </>
+            )}
+          />
+        </MediaUploadCheck>
       </div>
     );
   },
 
   save: () => <div hidden>!break-page-here!</div>,
 });
+
+interface StylesConfig {
+  [key: string]: React.CSSProperties;
+}
+
+const styles: StylesConfig = {
+  button: {},
+};

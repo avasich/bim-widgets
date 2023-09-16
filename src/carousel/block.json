@@ -17,5 +17,6 @@
   "supports": {
     "align": true
   },
+  "editorStyle": "file:./index.css",
   "editorScript": "file:./index.js"
 }

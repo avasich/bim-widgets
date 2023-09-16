@@ -6,13 +6,13 @@ import { Button } from "@wordpress/components";
 import { Icon, chevronDown, chevronUp, close, create } from "@wordpress/icons";
 
 import { BimSpacer } from ".";
-import "./editor.scss";
+import "./bim-editor-input.scss";
 
 interface BaseInputFieldConfig<F extends string, I, V> {
   fieldName: F;
   label?: string;
   getValue: (item: I) => V;
-  setValue: (item: I, value: V) => void;
+  newValue: (item: I, value: V) => I;
 }
 
 interface InputInputField<Item>
@@ -40,13 +40,13 @@ export const BimEditorInputField = <Item,>({
 }: {
   item: Item;
   config: InputFieldConfig<Item>;
-  onItemChange?: (item: Item) => void;
+  onItemChange: (item: Item) => void;
 }) => {
   switch (config.fieldName) {
     case "input": {
       const onChange = (value: string) => {
-        config.setValue(item, value);
-        onItemChange?.(item);
+        const newItem = config.newValue(item, value);
+        onItemChange(newItem);
       };
       return (
         <input
@@ -59,8 +59,8 @@ export const BimEditorInputField = <Item,>({
     }
     case "RichText": {
       const onChange = (value: string) => {
-        config.setValue(item, value);
-        onItemChange?.(item);
+        const newItem = config.newValue(item, value);
+        onItemChange(newItem);
       };
       return (
         <RichText
@@ -84,13 +84,13 @@ export const BimEditorInputGroup = <Item,>({
 }: {
   fieldsConfig: InputFieldConfig<Item>[];
   item: Item;
-  onItemChange?: (item: Item) => void;
+  onItemChange: (item: Item) => void;
 }) => {
   return (
     <div className="bim-editor-input-group">
-      {fieldsConfig.map((config) => {
+      {fieldsConfig.map((config, i) => {
         return (
-          <div className="bim-editor-input-row">
+          <div className="bim-editor-input-row" key={i}>
             <span className="bim-editor-input-label">{config.label}</span>
             <BimEditorInputField
               item={item}
@@ -159,23 +159,28 @@ export const BimEditorList = <Item,>({
     });
   };
 
-  const updateItems = () => setItems({ items: [...items] });
+  const changeItem = (i: number) => (item: Item) => {
+    const newItems = [...items.slice(0, i), item, ...items.slice(i + 1)];
+    setItems({ items: newItems });
+  };
 
   const onMoveUp = (i: number) => () => {
-    [items[i - 1], items[i]] = [items[i], items[i - 1]];
+    const newItems = [...items];
+    [newItems[i - 1], newItems[i]] = [newItems[i], newItems[i - 1]];
 
-    setItems({ items: [...items] });
+    setItems({ items: newItems });
   };
 
   const onMoveDown = (i: number) => () => {
-    [items[i + 1], items[i]] = [items[i], items[i + 1]];
+    const newItems = [...items];
+    [newItems[i + 1], newItems[i]] = [newItems[i], newItems[i + 1]];
 
-    setItems({ items: [...items] });
+    setItems({ items: newItems });
   };
 
   const onRemove = (i: number) => () => {
-    items.splice(i, 1);
-    setItems({ items: [...items] });
+    const newItems = [...items.slice(0, i), ...items.slice(i + 1)];
+    setItems({ items: newItems });
   };
 
   return (
@@ -186,7 +191,7 @@ export const BimEditorList = <Item,>({
             <BimEditorInputGroup
               item={item}
               fieldsConfig={fieldsConfig}
-              onItemChange={updateItems}
+              onItemChange={changeItem(i)}
             />
             <BimListItemControls
               onMoveUp={onMoveUp(i)}

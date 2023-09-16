@@ -26,6 +26,9 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
     const setItems = ({ items }: { items: NewsItem[] }) => {
       setAttributes({ news: items });
     };
+    const setTitle = (title: string) => {
+      setAttributes({ title: title });
+    };
 
     const config: InputFieldConfig<NewsItem>[] = [
       {
@@ -33,21 +36,21 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         label: "заголовок",
         placeholder: "Новая Статья",
         getValue: (item) => item.title,
-        setValue: (item, value) => (item.title = value),
+        newValue: (item, value) => ({ ...item, title: value }),
       },
       {
         fieldName: "RichText",
         label: "подпись",
         placeholder: "Вышла новая крутая статья",
         getValue: (item) => item.subtitle,
-        setValue: (item, value) => (item.subtitle = value),
+        newValue: (item, value) => ({ ...item, subtitle: value }),
       },
       {
         fieldName: "input",
         label: "ссылка",
         placeholder: "https://standard.ds.do",
         getValue: (item) => item.url,
-        setValue: (item, value) => (item.url = value),
+        newValue: (item, value) => ({ ...item, url: value }),
       },
     ];
 
@@ -57,14 +60,18 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         placeholder: "ПОСЛЕДНИЕ ОБНОВЛЕНИЯ",
         label: "Заголовок",
         getValue: (title) => title,
-        setValue: (_, newTitle) => setAttributes({ title: newTitle }),
+        newValue: (_, value) => value,
       },
     ];
 
     return (
       <div {...useBlockProps()}>
         <div className="bim-editor-input-list">
-          <BimEditorInputGroup item={title} fieldsConfig={titleConfig} />
+          <BimEditorInputGroup
+            item={title}
+            fieldsConfig={titleConfig}
+            onItemChange={setTitle}
+          />
           <BimEditorList
             items={news}
             createDefaultItem={createNewsItem}

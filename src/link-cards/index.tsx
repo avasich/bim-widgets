@@ -8,6 +8,8 @@ interface Card {
   title: string;
   subtitle: string;
   url: string;
+
+  id?: string;
 }
 
 interface Attributes {
@@ -28,21 +30,21 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         label: "заголовок",
         placeholder: "FAQ",
         getValue: (item) => item.title,
-        setValue: (item, value) => (item.title = value),
+        newValue: (item, value) => ({ ...item, title: value }),
       },
       {
         fieldName: "RichText",
         label: "подпись",
         placeholder: "какой-то текст",
         getValue: (item) => item.subtitle,
-        setValue: (item, value) => (item.subtitle = value),
+        newValue: (item, value) => ({ ...item, subtitle: value }),
       },
       {
         fieldName: "input",
         label: "ссылка",
         placeholder: "https://standard.ds.do",
         getValue: (item) => item.url,
-        setValue: (item, value) => (item.url = value),
+        newValue: (item, value) => ({ ...item, url: value }),
       },
     ];
     return (

@@ -1,15 +1,14 @@
+import apiFetch from "@wordpress/api-fetch";
 import {
   MediaUpload,
   MediaUploadCheck,
   useBlockProps,
 } from "@wordpress/block-editor";
-import { BlockConfiguration, registerBlockType } from "@wordpress/blocks";
 import { Button } from "@wordpress/components";
-import { useState, useEffect } from "@wordpress/element";
-import apiFetch from "@wordpress/api-fetch";
+import { useEffect, useState } from "@wordpress/element";
 import { WP_REST_API_Attachment } from "wp-types";
 
-import "./editor.scss";
+import "./bim-editor-image-upload.scss";
 
 const instructions = <p>вам нужно разрешение на загрузку изображений</p>;
 const ALLOWED_MEDIA_TYPES = ["image"];
@@ -27,7 +26,7 @@ const BimEditorImageUpload = ({
 }: {
   imageId: number;
   onChange: (newId: number) => void;
-  className: string;
+  className?: string;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
 
@@ -51,6 +50,8 @@ const BimEditorImageUpload = ({
     setImageUrl(image.url);
   };
 
+  const classes = `bim-image-upload-btn ${className ?? ""}`;
+
   return (
     <div {...useBlockProps()}>
       <MediaUploadCheck fallback={instructions}>
@@ -61,7 +62,7 @@ const BimEditorImageUpload = ({
           value={imageId}
           render={({ open }) => (
             <>
-              <Button className="bim-image-upload-btn" onClick={open}>
+              <Button className={classes} onClick={open}>
                 <img src={imageUrl} className="bim-image-upload-btn-img" />
               </Button>
             </>
