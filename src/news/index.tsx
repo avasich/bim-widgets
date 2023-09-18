@@ -32,7 +32,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
 
     const config: InputFieldConfig<NewsItem>[] = [
       {
-        fieldName: "input",
+        fieldName: "InputText",
         label: "заголовок",
         placeholder: "Новая Статья",
         getValue: (item) => item.title,
@@ -46,7 +46,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         newValue: (item, value) => ({ ...item, subtitle: value }),
       },
       {
-        fieldName: "input",
+        fieldName: "InputText",
         label: "ссылка",
         placeholder: "https://standard.ds.do",
         getValue: (item) => item.url,
@@ -56,7 +56,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
 
     const titleConfig: InputFieldConfig<string>[] = [
       {
-        fieldName: "input",
+        fieldName: "InputText",
         placeholder: "ПОСЛЕДНИЕ ОБНОВЛЕНИЯ",
         label: "Заголовок",
         getValue: (title) => title,

@@ -1,15 +1,10 @@
-$image-size: 120px;
-
-.bim-image-upload-btn {
-    width: $image-size;
-    height: $image-size;
-    padding: 0 !important;
-    border-radius: 50%;
-    overflow: hidden;
+.bim-editor-carousel-inspector {
+    padding: 0;
+    border: none;
 }
 
-.bim-image-upload-btn-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover;
+.bim-carousel-image-wrapper {
+    width: var(--bim-carousel-image-width);
+    height: var(--bim-carousel-image-height);
+    border-radius: var(--bim-carousel-image-border-radius);
 }

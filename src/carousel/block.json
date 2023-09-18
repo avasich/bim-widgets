@@ -10,13 +10,37 @@
     "root": ".bim-carousel"
   },
   "attributes": {
-    "imageId": {
-      "type": "number"
+    "items": {
+      "type": "array",
+      "default": [
+        {
+          "imageId": null,
+          "text": "",
+          "url": ""
+        }
+      ]
+    },
+    "imageSettings": {
+      "type": "object",
+      "default": {
+        "width": 120,
+        "height": 120,
+        "borderRadius": 50
+      }
+    },
+    "carouselSettings": {
+      "type": "object",
+      "default": {
+        "rows": 2,
+        "gaps": 30,
+        "maxCols": 4
+      }
     }
   },
   "supports": {
     "align": true
   },
   "editorStyle": "file:./index.css",
-  "editorScript": "file:./index.js"
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
 }

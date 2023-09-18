@@ -1,37 +1,17 @@
-$font-family: "Geometria", sans-serif;
-
 .bim-editor-round-btn {
     padding: 8px !important;
-    border-radius: 50%;
-    aspect-ratio: 1/1;
-
-    $button-background: teal;
-    background-color: $button-background;
-    transition: background 300ms ease-in-out;
-
-    color: white;
-
-    &:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-
-    &:hover {
-        background-color: darken($button-background, 10%);
-        color: white;
-    }
-
-    &:disabled {
-        background-color: gray;
-    }
+    border-radius: 50% !important;
+    aspect-ratio: 1/1 !important;
 
     &-remove {
-        $button-background: red;
+        $button-color: red;
 
-        background-color: $button-background;
+        background-color: $button-color !important;
+        color: white !important;
 
         &:hover {
-            background-color: darken($button-background, 10%);
+            background-color: transparent !important;
+            color: $button-color !important;
         }
     }
 }
@@ -77,8 +57,6 @@ $font-family: "Geometria", sans-serif;
     flex-direction: column;
     row-gap: 8px;
 
-    font-family: $font-family;
-
     .bim-editor-input-row {
         display: flex;
         flex-direction: column;
@@ -92,20 +70,26 @@ $font-family: "Geometria", sans-serif;
         padding-left: 7px; // 1+6 from border and padding of .bim-editor-input lower
     }
 
-    .bim-editor-input {
+    .bim-editor-input.rich-text,
+    .bim-editor-input input {
         word-wrap: anywhere;
         border: lightgrey solid 1px;
         border-radius: 4px;
         padding: 3px 6px 1px 6px;
         font-size: 14px;
         line-height: 1.7em;
-        $font-color: black;
-        color: $font-color;
+        color: var(--bim-gray-dark-2);
+
+        &:focus {
+            border-color: var(--bim-accent) !important;
+            box-shadow: none;
+            outline: none;
+        }
 
         [data-rich-text-placeholder]::after,
         &::placeholder {
             opacity: 0.6;
-            color: $font-color;
+            color: var(--bim-gray-dark-2);
         }
     }
 }

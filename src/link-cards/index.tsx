@@ -8,8 +8,6 @@ interface Card {
   title: string;
   subtitle: string;
   url: string;
-
-  id?: string;
 }
 
 interface Attributes {
@@ -26,7 +24,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
     };
     const config: InputFieldConfig<Card>[] = [
       {
-        fieldName: "input",
+        fieldName: "InputText",
         label: "заголовок",
         placeholder: "FAQ",
         getValue: (item) => item.title,
@@ -40,7 +38,7 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         newValue: (item, value) => ({ ...item, subtitle: value }),
       },
       {
-        fieldName: "input",
+        fieldName: "InputText",
         label: "ссылка",
         placeholder: "https://standard.ds.do",
         getValue: (item) => item.url,

@@ -2,10 +2,10 @@
 /// <reference lib="dom.iterable" />
 
 import { RichText } from "@wordpress/block-editor";
-import { Button } from "@wordpress/components";
+import { Button, TextControl } from "@wordpress/components";
 import { Icon, chevronDown, chevronUp, close, create } from "@wordpress/icons";
 
-import { BimSpacer } from ".";
+import { BimEditorImageUpload, BimSpacer } from ".";
 import "./bim-editor-input.scss";
 
 interface BaseInputFieldConfig<F extends string, I, V> {
@@ -15,9 +15,14 @@ interface BaseInputFieldConfig<F extends string, I, V> {
   newValue: (item: I, value: V) => I;
 }
 
-interface InputInputField<Item>
-  extends BaseInputFieldConfig<"input", Item, string> {
+interface InputTextInputField<Item>
+  extends BaseInputFieldConfig<"InputText", Item, string> {
   placeholder?: string;
+}
+
+interface InputNumberField<Item>
+  extends BaseInputFieldConfig<"InputNumber", Item, number> {
+  placeholder?: number;
 }
 
 interface RichTextInputField<Item>
@@ -26,12 +31,13 @@ interface RichTextInputField<Item>
 }
 
 interface ImageInputField<Item>
-  extends BaseInputFieldConfig<"Image", Item, number> {}
+  extends BaseInputFieldConfig<"Image", Item, number | undefined> {}
 
 export type InputFieldConfig<Item> =
-  | InputInputField<Item>
+  | InputTextInputField<Item>
   | RichTextInputField<Item>
-  | ImageInputField<Item>;
+  | ImageInputField<Item>
+  | InputNumberField<Item>;
 
 export const BimEditorInputField = <Item,>({
   item,
@@ -43,17 +49,53 @@ export const BimEditorInputField = <Item,>({
   onItemChange: (item: Item) => void;
 }) => {
   switch (config.fieldName) {
-    case "input": {
+    case "InputText": {
       const onChange = (value: string) => {
         const newItem = config.newValue(item, value);
         onItemChange(newItem);
       };
       return (
-        <input
+        <TextControl // return (
+          //   <div className="bim-editor-input-list-item" key={getItemKey(item, i)}>
+          //     <div className="bim-editor-input-preview">
+          //       {renderPreview && renderPreview(item)}
+          //     </div>
+          //     <BimEditorInputGroup
+          //       item={item}
+          //       fieldsConfig={fieldsConfig}
+          //       onItemChange={changeItem(i)}
+          //       className={listItemClassName}
+          //     />
+          //     <BimListItemControls
+          //       onMoveUp={onMoveUp(i)}
+          //       onMoveDown={onMoveDown(i)}
+          //       onRemove={onRemove(i)}
+          //       moveUpDisabled={i === 0}
+          //       moveDownDisabled={i === items.length - 1}
+          //     />
+          //   </div>
+          // );
           className="bim-editor-input"
+          type="text"
           value={config.getValue(item)}
           placeholder={config.placeholder}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange}
+        />
+      );
+    }
+    case "InputNumber": {
+      const onChange = (value: string) => {
+        const newItem = config.newValue(item, Number(value));
+        onItemChange(newItem);
+      };
+      const placeholder = (config.placeholder ?? 0).toString();
+      return (
+        <TextControl
+          className="bim-editor-input"
+          type="number"
+          value={config.getValue(item)}
+          placeholder={placeholder}
+          onChange={onChange}
         />
       );
     }
@@ -72,7 +114,16 @@ export const BimEditorInputField = <Item,>({
       );
     }
     case "Image": {
-      return <div>image loader will be here</div>;
+      const onChange = (value: number) => {
+        const newItem = config.newValue(item, value);
+        onItemChange(newItem);
+      };
+      return (
+        <BimEditorImageUpload
+          imageId={config.getValue(item)}
+          onChange={onChange}
+        />
+      );
     }
   }
 };
@@ -81,13 +132,15 @@ export const BimEditorInputGroup = <Item,>({
   fieldsConfig,
   item,
   onItemChange,
+  className = "",
 }: {
   fieldsConfig: InputFieldConfig<Item>[];
   item: Item;
   onItemChange: (item: Item) => void;
+  className?: string;
 }) => {
   return (
-    <div className="bim-editor-input-group">
+    <div className={`bim-editor-input-group ${className}`}>
       {fieldsConfig.map((config, i) => {
         return (
           <div className="bim-editor-input-row" key={i}>
@@ -142,16 +195,69 @@ export const BimListItemControls = ({
   </div>
 );
 
+export type RenderPreview<Item> = (item: Item) => React.JSX.Element;
+
+const BimEditorListItem = <Item,>({
+  item,
+  fieldsConfig,
+  changeItem,
+  listItemClassName = "",
+  renderPreview,
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+  moveUpDisabled,
+  moveDownDisabled,
+}: {
+  item: Item;
+  fieldsConfig: InputFieldConfig<Item>[];
+  changeItem: (item: Item) => void;
+  listItemClassName: string;
+  renderPreview?: RenderPreview<Item>;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  onRemove: () => void;
+  moveUpDisabled: boolean;
+  moveDownDisabled: boolean;
+}) => {
+  return (
+    <div className="bim-editor-input-list-item">
+      <div className="bim-editor-input-preview">
+        {renderPreview && renderPreview(item)}
+      </div>
+      <BimEditorInputGroup
+        item={item}
+        fieldsConfig={fieldsConfig}
+        onItemChange={changeItem}
+        className={listItemClassName}
+      />
+      <BimListItemControls
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+        onRemove={onRemove}
+        moveUpDisabled={moveUpDisabled}
+        moveDownDisabled={moveDownDisabled}
+      />
+    </div>
+  );
+};
+
 export const BimEditorList = <Item,>({
   items,
   fieldsConfig,
   setItems,
   createDefaultItem,
+  getItemKey = (_, index) => index,
+  listItemClassName = "",
+  renderPreview,
 }: {
   items: Item[];
   fieldsConfig: InputFieldConfig<Item>[];
   setItems: ({ items }: { items: Item[] }) => void;
   createDefaultItem: () => Item;
+  getItemKey?: (item: Item, index: number) => string | number;
+  listItemClassName?: string;
+  renderPreview?: RenderPreview<Item>;
 }) => {
   const onAddItem = () => {
     setItems({
@@ -187,20 +293,19 @@ export const BimEditorList = <Item,>({
     <div className="bim-editor-input-list">
       {items.map((item, i) => {
         return (
-          <div className="bim-editor-input-list-item" key={i}>
-            <BimEditorInputGroup
-              item={item}
-              fieldsConfig={fieldsConfig}
-              onItemChange={changeItem(i)}
-            />
-            <BimListItemControls
-              onMoveUp={onMoveUp(i)}
-              onMoveDown={onMoveDown(i)}
-              onRemove={onRemove(i)}
-              moveUpDisabled={i === 0}
-              moveDownDisabled={i === items.length - 1}
-            />
-          </div>
+          <BimEditorListItem
+            key={getItemKey(item, i)}
+            item={item}
+            changeItem={changeItem(i)}
+            fieldsConfig={fieldsConfig}
+            listItemClassName={listItemClassName}
+            onMoveUp={onMoveUp(i)}
+            onMoveDown={onMoveDown(i)}
+            onRemove={onRemove(i)}
+            moveUpDisabled={i === 0}
+            moveDownDisabled={i === items.length - 1}
+            renderPreview={renderPreview}
+          />
         );
       })}
       <div className="bim-editor-add-btn-container">
