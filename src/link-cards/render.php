@@ -14,14 +14,13 @@ $maxColumns = $attributes['maxColumns'] ?? 3;
             $cardTitle = $card['title'];
             $cardSubtitle = $card['subtitle'];
             $url = $card['url'];
-            ?>
+            $a_attr = empty($url ?? "") ? "" : "href='$url'";
+        ?>
             <div class="bim-grid-col bim-grid-col-<?php echo $maxColumns ?>">
-                <!-- <div class="bim-card"> -->
-                    <a class="bim-card" href="<?php echo $url ?>">
-                        <h3 class="bim-card-title"><?php echo $cardTitle ?></h3>
-                        <p class="bim-card-description"><?php echo $cardSubtitle ?></p>
-                    </a>
-                <!-- </div> -->
+                <a <?php echo $a_attr ?> class="bim-card"">
+                        <h3 class=" bim-card-title"><?php echo $cardTitle ?></h3>
+                    <p class="bim-card-description"><?php echo $cardSubtitle ?></p>
+                </a>
             </div>
         <?php } ?>
     </div>

@@ -73,7 +73,7 @@
     .bim-editor-input.rich-text,
     .bim-editor-input input {
         word-wrap: anywhere;
-        border: lightgrey solid 1px;
+        border: var(--bim-gray-light-1) solid 1px;
         border-radius: 4px;
         padding: 3px 6px 1px 6px;
         font-size: 14px;

@@ -75,6 +75,13 @@ registerBlockType(json as BlockConfiguration<Attributes>, {
         getValue: (item) => item.text,
         newValue: (item, value) => ({ ...item, text: value }),
       },
+      {
+        fieldName: "InputText",
+        label: "ссылка",
+        placeholder: "https://standard.ds.do",
+        getValue: (item) => item.url,
+        newValue: (item, value) => ({ ...item, url: value }),
+      }
     ];
 
     const setItems = ({ items }: { items: ItemWithMeta[] }) => {

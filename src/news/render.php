@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var $attributes
  */
@@ -14,9 +15,10 @@ $title = $attributes['title'];
             $newsTitle = $n['title'];
             $subtitle = $n['subtitle'];
             $url = $n['url'];
-            ?>
+            $a_attr = empty($url ?? "") ? "" : "href='$url'";
+        ?>
             <li class="bim-separated-list-item">
-                <a href="<?php echo $url ?>">
+                <a <?php echo $a_attr ?>>
                     <h3 class="bim-accent"><?php echo $newsTitle ?></h3>
                 </a>
                 <?php echo $subtitle ?>

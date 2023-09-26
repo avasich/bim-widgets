@@ -17,7 +17,7 @@ $carousel_id = uniqid("carousel-");
 
 <div <?php echo get_block_wrapper_attributes(); ?>>
     <style>
-        <?php echo "#$carousel_id" ?> .bim-carousel-image-wrapper {
+        <?php echo "#$carousel_id " ?>.bim-carousel-image-wrapper {
             border-radius: <?php echo "$image_border_radius" . "%" ?>;
             width: <?php echo $image_width . "px" ?>;
             height: <?php echo $image_height . "px" ?>;
@@ -29,17 +29,18 @@ $carousel_id = uniqid("carousel-");
                 <?php
                 foreach ($items as $item) {
                     $image_id = $item['imageId'];
+                    $image_url = wp_get_attachment_image_url($image_id, 'full');
                     $name = $item['text'];
                     $url = $item['url'];
-                    $image_url = wp_get_attachment_image_url($image_id, 'full');
+                    $a_attr = empty($url ?? "") ? "" : "href='$url'";
                 ?>
                     <div class="swiper-slide bim-carousel-slide">
-                        <div class="bim-carousel-slide-wrapper">
+                        <a <?php echo $a_attr ?> class="bim-carousel-slide-wrapper">
                             <div class="bim-carousel-image-wrapper">
                                 <img src="<?php echo $image_url ?>" />
                             </div>
                             <div class="bim-carousel-text"><?php echo $name ?></div>
-                        </div>
+                        </a>
                     </div>
                 <?php } ?>
             </div>
