@@ -1,4 +1,4 @@
-# bim-widgets.ts
+# bim-widgets
 
 A wordpress plugin with blocks for the new version of https://standard.ds.do (not yet deployed).
 
